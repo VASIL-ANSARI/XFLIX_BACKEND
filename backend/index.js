@@ -9,6 +9,14 @@ const captureDateMiddleware = require("./middleware/middleware");
 const config = require("./config/config");
 const app = express();
 
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received");
+  if (app) {
+    app.close();
+  }
+});
+
+
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
