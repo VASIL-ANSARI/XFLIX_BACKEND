@@ -90,7 +90,7 @@ const getFilteredVideos = catchAsync(async(req,res) => {
         const content = req.query.contentRating;
         let contentFiltered = [];
         let contentRatingList = [contentRating.Anyone,contentRating.SevenPlus,contentRating.TwelvePlus,contentRating.SixteenPlus,contentRating.EighteenPlus];
-        if(content){
+        if(content && content !== contentRating.Anyone){
             for(let cont of contentRatingList){
                 contentFiltered.push(cont);
                 if(cont === content){
