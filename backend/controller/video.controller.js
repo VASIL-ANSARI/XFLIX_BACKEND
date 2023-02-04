@@ -85,14 +85,23 @@ const getFilteredVideos = catchAsync(async(req,res) => {
             if(genre === 'ALL'){
             }else{
                 genresList = genre.split(',');
-            }
-            
+            }  
         }
         const content = req.query.contentRating;
-        let contentRatingList = [contentRating.Anyone,contentRating.EighteenPlus,contentRating.SevenPlus,contentRating.SixteenPlus,contentRating.TwelvePlus];
-        if(content){
-            contentRatingList = content.split(',');
+        let contentFiltered = [];
+        let contentRatingList = [contentRating.Anyone,contentRating.SevenPlus,contentRating.TwelvePlus,contentRating.SixteenPlus,contentRating.EighteenPlus];
+        if(content && content !== contentRating.Anyone){
+            for(let cont of contentRatingList){
+                contentFiltered.push(cont);
+                if(cont === content){
+                    break;
+                }
+            }
         }
+        else{
+            contentFiltered = contentRatingList;
+        }
+        console.log(contentFiltered);
         const sortBy = req.query.sortBy ? req.query.sortBy : 'releaseDate';
         const queryList = [
             {
@@ -102,7 +111,7 @@ const getFilteredVideos = catchAsync(async(req,res) => {
                 genre: {$in: genresList}
             },
             {
-                contentRating: {$in: contentRatingList}
+                contentRating: {$in: contentFiltered}
             },
         ];
         console.log(queryList);
